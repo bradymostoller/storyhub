@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:cyclone23@localhost:3306/storyhub?connect_timeout=300"
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  books    Book[]
+}
+
+model Book {
+  id    Int    @id @default(autoincrement())
+  title String
+  description String
+  pages Page[]
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Page {
+  id       Int    @id @default(autoincrement())
+  text     String @db.Text
+  imageUrl String @db.VarChar(2048)
+  book     Book   @relation(fields: [bookId], references: [id])
+  bookId   Int
+}
+
+
